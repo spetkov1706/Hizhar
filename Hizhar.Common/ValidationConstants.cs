@@ -18,15 +18,15 @@ namespace Hizhar.Common
             public const int NameMinLength = 3;
             public const int NameMaxLength = 80;
             public const int DescriptionMinLength = 10;
-            public const int DescriprionMaxLength = 3000;
+            public const int DescriptionMaxLength = 3000;
             public const int AltitudeMin = 0;
-            public const int AltitudeMax = 30000;
-            public const int MedsMin = 1;
+            public const int AltitudeMax = 3000;
+            public const int BedsMin = 1;
             public const int BedsMax = 500;
             public const string PriceMin = "0";
             public const string PriceMax = "500";
             public const int PhoneNumberMaxLength = 20;
-            public const string PhoneNumberRegex = @"^\+?[0-9 ]{6, 20}";
+            public const string PhoneNumberRegex = @"^\+?[0-9 ]{6,20}$";
             public const int ImageUrlMaxLength = 2048;
         }
         public static class Peak
@@ -43,7 +43,7 @@ namespace Hizhar.Common
             public const int NameMinLength = 3;
             public const int NameMaxLength = 100;
             public const int DescriptionMinLength = 10;
-            public const int DescriprionMaxLength = 3000;
+            public const int DescriptionMaxLength = 3000;
             public const double LengthMin = 0.1;
             public const double LengthMax = 100;
             public const int ElevationGainMin = 0;
@@ -51,7 +51,6 @@ namespace Hizhar.Common
             public const int DurationMin = 10;
             public const int DurationMax = 2880;
             public const int PointsTextMaxLength = 4000;
-
         }
 
         public static class TrailPoint
