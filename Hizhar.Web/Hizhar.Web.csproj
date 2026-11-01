@@ -6,4 +6,20 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.11">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hizhar.Common\Hizhar.Common.csproj" />
+    <ProjectReference Include="..\Hizhar.Data.Models\Hizhar.Data.Models.csproj" />
+    <ProjectReference Include="..\Hizhar.Data\Hizhar.Data.csproj" />
+    <ProjectReference Include="..\Hizhar.Services\Hizhar.Services.csproj" />
+    <ProjectReference Include="..\Hizhar.Web.ViewModels\Hizhar.Web.ViewModels.csproj" />
+  </ItemGroup>
+
 </Project>

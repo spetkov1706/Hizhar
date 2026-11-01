@@ -1,10 +1,5 @@
-\# Хижар
+# Hizhar
 
+A platform for mountain huts, peaks and hiking trails in Bulgaria (ASP.NET Core MVC).
 
-
-Платформа за хижи, върхове и планински маршрути в България (ASP.NET Core MVC).
-
-
-
-> Проектът е в процес на разработка.
-
+> Work in progress.

@@ -1,3 +1,8 @@
 <Solution>
+  <Project Path="Hizhar.Common/Hizhar.Common.csproj" Id="a20befd1-b71d-4648-bceb-31b3d061c102" />
+  <Project Path="Hizhar.Data.Models/Hizhar.Data.Models.csproj" Id="ea2e3bdc-5250-41f1-9e32-4b4a7ca90af0" />
+  <Project Path="Hizhar.Data/Hizhar.Data.csproj" Id="5491e0d8-c5c2-4486-a82b-a5847bb1693c" />
+  <Project Path="Hizhar.Services/Hizhar.Services.csproj" Id="47988460-5a08-46cd-bb52-7e267aa7fc98" />
+  <Project Path="Hizhar.Web.ViewModels/Hizhar.Web.ViewModels.csproj" Id="27b96031-356e-41ef-9e00-903591ed178f" />
   <Project Path="Hizhar.Web/Hizhar.Web.csproj" />
 </Solution>
