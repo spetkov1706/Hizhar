@@ -37,7 +37,7 @@ namespace Hizhar.Data.Models
         [MaxLength(PhoneNumberMaxLength)]
         public string? PhoneNumber { get; set; }
 
-        public string? ImagUrl { get; set; }
+        public string? ImageUrl { get; set; }
         
         public bool IsDeleted { get; set; }
 
@@ -56,8 +56,8 @@ namespace Hizhar.Data.Models
 
         public virtual ICollection<Photo> Photos { get; set; } = new HashSet<Photo>();
 
-        public virtual ICollection<FavoriteHut> FavoriteBy { get; set; } = new HashSet<FavoriteHut>();
+        public virtual ICollection<FavoriteHut> FavoritedBy { get; set; } = new HashSet<FavoriteHut>();
 
-        public virtual ICollection<HutKeeperRequest> KeeperRequest { get; set; } = new HashSet<HutKeeperRequest>();
+        public virtual ICollection<HutKeeperRequest> KeeperRequests { get; set; } = new HashSet<HutKeeperRequest>();
     }
 }
