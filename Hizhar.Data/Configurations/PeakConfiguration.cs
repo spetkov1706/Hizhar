@@ -1,4 +1,5 @@
 ﻿using Hizhar.Data.Models;
+using Hizhar.Data.Seeding;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -13,6 +14,8 @@ namespace Hizhar.Data.Configuration
                 .WithMany(m => m.Peaks)
                 .HasForeignKey(p => p.MountainId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasData(SeedData.GetPeaks());
         }
     }
 }
