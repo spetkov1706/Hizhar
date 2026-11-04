@@ -1,8 +1,12 @@
 using Hizhar.Data;
 using Hizhar.Data.Models;
+using Hizhar.Web.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Hizhar.Web.Infrastructure.Extensions;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,8 +27,24 @@ builder.Services
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<HizharDbContext>();
 
+
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Identity/Account/Login";
+    options.AccessDeniedPath = "/Identity/Account/AccessDenied";
+});
+
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+
+    options.ModelBindingMessageProvider.SetValueMustNotBeNullAccessor(_ => "Полето е задължително.");
+    options.ModelBindingMessageProvider.SetValueIsInvalidAccessor(value => $"Стойността „{value}“ е невалидна.");
+    options.ModelBindingMessageProvider.SetAttemptedValueIsInvalidAccessor((value, field) => $"Стойността „{value}“ е невалидна за „{field}“.");
+    options.ModelBindingMessageProvider.SetValueMustBeANumberAccessor(field => $"Полето „{field}“ трябва да е число.");
+    options.ModelBindingMessageProvider.SetMissingBindRequiredValueAccessor(field => $"Липсва стойност за „{field}“.");
+});
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
@@ -32,20 +52,38 @@ var app = builder.Build();
 await app.ApplyMigrationsAndSeedAsync();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+}
+else
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
+app.UseStatusCodePagesWithReExecute("/Home/HttpError", "?statusCode={0}");
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
+
+var culture = new CultureInfo("en-US");
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture(culture),
+    SupportedCultures = new[] { culture },
+    SupportedUICultures = new[] { culture }
+});
 
 app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",
