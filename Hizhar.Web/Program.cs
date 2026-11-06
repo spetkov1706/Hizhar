@@ -47,6 +47,8 @@ builder.Services.AddControllersWithViews(options =>
 });
 builder.Services.AddRazorPages();
 
+builder.Services.AddApplicationServices();
+
 var app = builder.Build();
 
 await app.ApplyMigrationsAndSeedAsync();
