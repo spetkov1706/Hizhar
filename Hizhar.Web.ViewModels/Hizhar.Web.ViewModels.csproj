@@ -9,7 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Hizhar.Common\Hizhar.Common.csproj" />
     <ProjectReference Include="..\Hizhar.Data.Models\Hizhar.Data.Models.csproj" />
-    <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
 </Project>
