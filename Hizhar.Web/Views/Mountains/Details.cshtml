@@ -1,0 +1,77 @@
+﻿@model MountainDetailsViewModel
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<div class="hz-page-header">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Планини</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+        </ol>
+    </nav>
+    <h1>@Model.Name</h1>
+    <p class="subtitle">@Model.Description</p>
+</div>
+
+<h2 class="hz-section-title"><i class="bi bi-house-fill"></i> Хижи (@Model.Huts.Count())</h2>
+@if (!Model.Huts.Any())
+{
+    <p class="text-muted">Все още няма добавени хижи.</p>
+}
+<div class="row g-4">
+    @foreach (HutCardViewModel hut in Model.Huts)
+    {
+        <div class="col-md-6 col-lg-4">
+            <partial name="_HutCardPartial" model="hut" />
+        </div>
+    }
+</div>
+
+<h2 class="hz-section-title"><i class="bi bi-triangle-fill"></i> Върхове (@Model.Peaks.Count())</h2>
+<div class="hz-panel p-0">
+    <table class="table table-hover mb-0 align-middle">
+        <thead>
+            <tr>
+                <th>Връх</th>
+                <th>Височина</th>
+                <th class="d-none d-md-table-cell">Изкачили го</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (PeakListItemViewModel peak in Model.Peaks)
+            {
+                <tr>
+                    <td>
+                        @peak.Name
+                        @if (peak.IsNationalTouristSite)
+                        {
+                            <span class="badge bg-warning text-dark ms-1" title="От 100-те национални туристически обекта">НТО</span>
+                        }
+                        @if (peak.IsClimbed)
+                        {
+                            <i class="bi bi-check-circle-fill text-success ms-1" title="Изкачен"></i>
+                        }
+                    </td>
+                    <td>@peak.Elevation м</td>
+                    <td class="d-none d-md-table-cell">@peak.ClimbersCount</td>
+                    <td class="text-end">
+                        <a asp-controller="Peaks" asp-action="Details" asp-route-id="@peak.Id" class="btn btn-sm btn-outline-hz">Детайли</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<h2 class="hz-section-title"><i class="bi bi-signpost-split-fill"></i> Маршрути (@Model.Trails.Count())</h2>
+<div class="row g-4">
+    @foreach (TrailCardViewModel trail in Model.Trails)
+    {
+        <div class="col-md-6 col-lg-4">
+            <partial name="_TrailCardPartial" model="trail" />
+        </div>
+    }
+</div>
+Покажи целия файл (76 ред

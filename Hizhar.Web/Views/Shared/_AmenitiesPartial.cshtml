@@ -1,0 +1,6 @@
+﻿@model AmenitiesViewModel
+<span class="hz-amenities">
+    <i class="bi bi-droplet-fill @(Model.HasWater ? "" : "off")" title="@(Model.HasWater ? "Има вода" : "Няма вода")"></i>
+    <i class="bi bi-lightning-charge-fill @(Model.HasElectricity ? "" : "off")" title="@(Model.HasElectricity ? "Има ток" : "Няма ток")"></i>
+    <i class="bi bi-cup-hot-fill @(Model.HasFood ? "" : "off")" title="@(Model.HasFood ? "Има храна" : "Няма храна")"></i>
+</span>
