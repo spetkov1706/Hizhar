@@ -9,6 +9,9 @@ namespace Hizhar.Web.Infrastructure.Extensions
         {
             services.AddScoped<IMountainService, MountainService>();
 
+            services.AddScoped<IHutService, HutService>();
+            services.AddScoped<IPeakService, PeakService>();
+
             return services;
         }
     }
