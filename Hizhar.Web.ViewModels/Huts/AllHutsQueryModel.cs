@@ -15,7 +15,7 @@ namespace Hizhar.Web.ViewModels.Huts
         public int? MountainId { get; set; }
 
         [Display(Name = "Мин. надморска височина")]
-        public int? MinBMinAltitude { get; set; }
+        public int? MinAltitude { get; set; }
 
         [Display(Name = "Мин. брой легла")]
         public int? MinBeds { get; set; }
