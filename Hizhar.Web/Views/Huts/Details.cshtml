@@ -1,0 +1,125 @@
+﻿@model HutDetailsViewModel
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+}
+
+<div class="hz-page-header">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Хижи</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Mountains" asp-action="Details" asp-route-id="@Model.MountainId">@Model.MountainName</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+        </ol>
+    </nav>
+    <h1>@Model.Name</h1>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        @if (!string.IsNullOrEmpty(Model.ImageUrl))
+        {
+            <img src="@Model.ImageUrl" alt="@Model.Name" class="hz-cover mb-4" />
+        }
+        else
+        {
+            <div class="hz-placeholder large mb-4"><i class="bi bi-house-door"></i></div>
+        }
+
+        <div class="hz-panel">
+            <h4>За хижата</h4>
+            <p class="mb-0">@Model.Description</p>
+        </div>
+
+        @* ---------- Ревюта ---------- *@
+        <div class="hz-panel">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h4 class="mb-0">Ревюта (@Model.ReviewsCount)</h4>
+                <span>
+                    <partial name="_RatingStarsPartial" model="Model.AverageRating" />
+                    <strong>@Model.AverageRating.ToString("0.0")</strong>
+                </span>
+            </div>
+
+            @if (!Model.Reviews.Any())
+            {
+                <p class="text-muted mb-0">Все още няма ревюта. Бъдете първи!</p>
+            }
+
+            @foreach (ReviewViewModel review in Model.Reviews)
+            {
+                <div class="border-top pt-3 mt-3">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <strong>@review.AuthorName</strong>
+                            <partial name="_RatingStarsPartial" model="(double)review.Rating" />
+                        </div>
+                        <small class="text-muted">@review.CreatedOn.ToLocalTime().ToString("dd.MM.yyyy")</small>
+                    </div>
+                    <p class="mb-1 mt-1">@review.Content</p>
+                </div>
+            }
+        </div>
+
+        <div class="hz-panel">
+            <h4>Снимки от туристи (@Model.Photos.Count())</h4>
+
+            @if (!Model.Photos.Any())
+            {
+                <p class="text-muted mb-0">Все още няма снимки.</p>
+            }
+
+            <div class="row g-3 hz-gallery">
+                @foreach (PhotoViewModel photo in Model.Photos)
+                {
+                    <div class="col-6 col-md-4">
+                        <a href="@photo.FilePath" target="_blank" rel="noopener">
+                            <img src="@photo.FilePath" alt="@(photo.Caption ?? Model.Name)" loading="lazy" />
+                        </a>
+                        <div class="small mt-1">
+                            @photo.Caption
+                            <span class="text-muted">– @photo.AuthorName</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="hz-panel">
+            <ul class="list-unstyled mb-0">
+                <li class="mb-2"><i class="bi bi-arrow-up-right-circle text-success"></i> <strong>@Model.Altitude м</strong> надморска височина</li>
+                <li class="mb-2"><i class="bi bi-moon-stars text-success"></i> <strong>@Model.BedsCount</strong> легла общо</li>
+                <li class="mb-2"><i class="bi bi-cash-coin text-success"></i> <strong>@Model.PricePerNight.ToString("0.00") лв.</strong> на нощувка</li>
+                @if (!string.IsNullOrEmpty(Model.PhoneNumber))
+                {
+                    <li class="mb-2"><i class="bi bi-telephone text-success"></i> <a href="tel:@Model.PhoneNumber">@Model.PhoneNumber</a></li>
+                }
+                <li class="mb-2">
+                    <i class="bi bi-person-badge text-success"></i>
+                    Хижар: @(Model.KeeperEmail ?? "няма регистриран")
+                </li>
+                <li>
+                    <partial name="_AmenitiesPartial" model="new AmenitiesViewModel(Model.HasWater, Model.HasElectricity, Model.HasFood)" />
+                    <span class="small text-muted">вода · ток · храна</span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="hz-panel">
+            <h5><i class="bi bi-geo-alt"></i> Местоположение</h5>
+            <div class="hz-mini-map"
+                 data-lat="@Model.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture)"
+                 data-lng="@Model.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture)"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="~/js/mini-map.js" asp-append-version="true"></script>
+}

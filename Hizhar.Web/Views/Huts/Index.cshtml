@@ -1,0 +1,102 @@
+﻿@model AllHutsQueryModel
+@{
+    ViewData["Title"] = "Хижи";
+}
+
+<div class="hz-page-header">
+    <h1>Хижи</h1>
+    <p class="subtitle">Намери подходящата хижа – по планина, височина, капацитет и удобства.</p>
+</div>
+
+<div class="row g-4">
+    <aside class="col-lg-3">
+        <form method="get" asp-action="Index" class="hz-filters">
+            <div class="mb-3">
+                <label asp-for="SearchTerm" class="form-label"></label>
+                <input asp-for="SearchTerm" class="form-control" placeholder="Име или описание..." />
+            </div>
+            <div class="mb-3">
+                <label asp-for="MountainId" class="form-label"></label>
+                <select asp-for="MountainId" class="form-select"
+                        asp-items="@(new SelectList(Model.Mountains, nameof(MountainOptionViewModel.Id), nameof(MountainOptionViewModel.Name)))">
+                    <option value="">Всички планини</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label asp-for="MinAltitude" class="form-label"></label>
+                <input asp-for="MinAltitude" class="form-control" type="number" min="0" max="3000" step="100" placeholder="напр. 1800" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="MinBeds" class="form-label"></label>
+                <input asp-for="MinBeds" class="form-control" type="number" min="1" placeholder="напр. 50" />
+            </div>
+            <div class="mb-3">
+                <div class="form-check">
+                    <input asp-for="HasWater" class="form-check-input" />
+                    <label asp-for="HasWater" class="form-check-label"></label>
+                </div>
+                <div class="form-check">
+                    <input asp-for="HasElectricity" class="form-check-input" />
+                    <label asp-for="HasElectricity" class="form-check-label"></label>
+                </div>
+                <div class="form-check">
+                    <input asp-for="HasFood" class="form-check-input" />
+                    <label asp-for="HasFood" class="form-check-label"></label>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Sorting" class="form-label"></label>
+                <select asp-for="Sorting" class="form-select" asp-items="Html.GetEnumSelectList<HutSorting>()"></select>
+            </div>
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-hz"><i class="bi bi-search"></i> Търси</button>
+                <a asp-action="Index" class="btn btn-link">Изчисти филтрите</a>
+            </div>
+        </form>
+    </aside>
+
+    <section class="col-lg-9">
+        <p class="text-muted">Намерени хижи: <strong>@Model.TotalHuts</strong></p>
+
+        @if (!Model.Huts.Any())
+        {
+            <div class="hz-panel text-center">
+                <i class="bi bi-search display-5 text-secondary"></i>
+                <p class="mt-2 mb-0">Няма хижи, които отговарят на филтрите.</p>
+            </div>
+        }
+
+        <div class="row g-4">
+            @foreach (HutCardViewModel hut in Model.Huts)
+            {
+                <div class="col-md-6 col-xl-4">
+                    <partial name="_HutCardPartial" model="hut" />
+                </div>
+            }
+        </div>
+
+        @if (Model.TotalPages > 1)
+        {
+            <nav class="mt-4" aria-label="Страници">
+                <ul class="pagination justify-content-center">
+                    @for (int pageNumber = 1; pageNumber <= Model.TotalPages; pageNumber++)
+                    {
+                        <li class="page-item @(pageNumber == Model.CurrentPage ? "active" : "")">
+                            <a class="page-link"
+                               asp-action="Index"
+                               asp-route-CurrentPage="@pageNumber"
+                               asp-route-SearchTerm="@Model.SearchTerm"
+                               asp-route-MountainId="@Model.MountainId"
+                               asp-route-MinAltitude="@Model.MinAltitude"
+                               asp-route-MinBeds="@Model.MinBeds"
+                               asp-route-HasWater="@Model.HasWater"
+                               asp-route-HasElectricity="@Model.HasElectricity"
+                               asp-route-HasFood="@Model.HasFood"
+                               asp-route-Sorting="@Model.Sorting">@pageNumber</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        }
+    </section>
+</div>

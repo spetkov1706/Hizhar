@@ -1,0 +1,81 @@
+﻿@model PeakDetailsViewModel
+@{
+    ViewData["Title"] = Model.Name;
+    bool isSignedIn = User.Identity?.IsAuthenticated == true;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+}
+
+<div class="hz-page-header">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Върхове</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Mountains" asp-action="Details" asp-route-id="@Model.MountainId">@Model.MountainName</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+        </ol>
+    </nav>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <h1 class="mb-0">
+            @Model.Name <small class="text-muted">@Model.Elevation м</small>
+            @if (Model.IsNationalTouristSite)
+            {
+                <span class="badge bg-warning text-dark fs-6 align-middle">НТО</span>
+            }
+        </h1>
+        @if (isSignedIn)
+        {
+            <form method="post" asp-controller="ClimbedPeaks" asp-action="Toggle" asp-route-peakId="@Model.Id">
+                @if (Model.IsClimbed)
+                {
+                    <button type="submit" class="btn btn-success"><i class="bi bi-check2-circle"></i> Изкачен от вас</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-sunset"><i class="bi bi-flag-fill"></i> Изкачих го!</button>
+                }
+            </form>
+        }
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="hz-panel">
+            <h4>За върха</h4>
+            <p>@(Model.Description ?? "Няма добавено описание.")</p>
+            <p class="mb-0 hz-meta"><i class="bi bi-people"></i> Изкачен от <strong>@Model.ClimbersCount</strong> потребители в „Хижар“.</p>
+        </div>
+
+        <div class="hz-panel">
+            <h4>Най-близки хижи</h4>
+            @if (!Model.NearbyHuts.Any())
+            {
+                <p class="text-muted mb-0">Няма хижи в тази планина.</p>
+            }
+            <ul class="list-group list-group-flush">
+                @foreach (NearbyHutViewModel hut in Model.NearbyHuts)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                        <a asp-controller="Huts" asp-action="Details" asp-route-id="@hut.Id">@hut.Name</a>
+                        <span class="hz-meta">@hut.Altitude м · ~@hut.DistanceKm.ToString("0.0") км</span>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="hz-panel">
+            <h5><i class="bi bi-geo-alt"></i> Местоположение</h5>
+            <div class="hz-mini-map"
+                 data-lat="@Model.Latitude.ToString(System.Globalization.CultureInfo.InvariantCulture)"
+                 data-lng="@Model.Longitude.ToString(System.Globalization.CultureInfo.InvariantCulture)"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="~/js/mini-map.js" asp-append-version="true"></script>
+}
