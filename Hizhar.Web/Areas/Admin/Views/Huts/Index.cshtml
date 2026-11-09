@@ -1,0 +1,33 @@
+﻿@model IEnumerable<AdminHutListItemViewModel>
+@{
+    ViewData["Title"] = "Хижи – админ";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Хижи</h1>
+    <a asp-action="Create" class="btn btn-hz"><i class="bi bi-plus-lg"></i> Нова хижа</a>
+</div>
+
+<div class="hz-panel p-0 table-responsive">
+    <table class="table align-middle mb-0">
+        <thead>
+            <tr><th>Хижа</th><th>Планина</th><th>Височина</th><th>Легла</th><th>Хижар</th><th class="text-end">Действия</th></tr>
+        </thead>
+        <tbody>
+            @foreach (AdminHutListItemViewModel hut in Model)
+            {
+                <tr>
+                    <td><a asp-area="" asp-controller="Huts" asp-action="Details" asp-route-id="@hut.Id">@hut.Name</a></td>
+                    <td>@hut.MountainName</td>
+                    <td>@hut.Altitude м</td>
+                    <td>@hut.BedsCount</td>
+                    <td class="small">@(hut.OwnerEmail ?? "—")</td>
+                    <td class="text-end text-nowrap">
+                        <a asp-action="Edit" asp-route-id="@hut.Id" class="btn btn-sm btn-outline-hz" title="Редактирай"><i class="bi bi-pencil"></i></a>
+                        <a asp-action="Delete" asp-route-id="@hut.Id" class="btn btn-sm btn-outline-danger" title="Изтрий"><i class="bi bi-trash"></i></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

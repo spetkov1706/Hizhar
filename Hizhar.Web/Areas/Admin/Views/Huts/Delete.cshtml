@@ -1,0 +1,25 @@
+﻿@model HutDeleteViewModel
+@{
+    ViewData["Title"] = "Изтриване на хижа";
+}
+
+<h1 class="mb-3">Изтриване на хижа</h1>
+
+<div class="hz-panel">
+    <p class="lead">Сигурни ли сте, че искате да изтриете <strong>@Model.Name</strong> (@Model.MountainName)?</p>
+
+    @if (Model.ActiveReservationsCount > 0)
+    {
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle"></i>
+            Хижата има <strong>@Model.ActiveReservationsCount</strong> активни резервации. Те ще останат в историята, но хижата няма да се вижда.
+        </div>
+    }
+
+    <p class="small text-muted">Хижата не се трие физически от базата (soft delete) – ревютата и резервациите се запазват.</p>
+
+    <form method="post" asp-action="Delete" asp-route-id="@Model.Id">
+        <button type="submit" class="btn btn-danger"><i class="bi bi-trash"></i> Да, изтрий</button>
+        <a asp-action="Index" class="btn btn-link">Отказ</a>
+    </form>
+</div>

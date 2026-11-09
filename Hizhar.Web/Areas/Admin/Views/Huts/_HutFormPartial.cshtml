@@ -1,0 +1,78 @@
+﻿@model HutFormModel
+
+<div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+<div class="row g-3">
+    <div class="col-md-8">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="MountainId" class="form-label"></label>
+        <select asp-for="MountainId" class="form-select"
+                asp-items="@(new SelectList(Model.Mountains, nameof(MountainOptionViewModel.Id), nameof(MountainOptionViewModel.Name)))">
+            <option value="0">-- Изберете --</option>
+        </select>
+        <span asp-validation-for="MountainId"></span>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+        <span asp-validation-for="Description"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="Altitude" class="form-label"></label>
+        <input asp-for="Altitude" class="form-control" />
+        <span asp-validation-for="Altitude"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="Latitude" class="form-label"></label>
+        <input asp-for="Latitude" class="form-control" placeholder="42.1931" />
+        <span asp-validation-for="Latitude"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="Longitude" class="form-label"></label>
+        <input asp-for="Longitude" class="form-control" placeholder="23.5836" />
+        <span asp-validation-for="Longitude"></span>
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="BedsCount" class="form-label"></label>
+        <input asp-for="BedsCount" class="form-control" />
+        <span asp-validation-for="BedsCount"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="PricePerNight" class="form-label"></label>
+        <input asp-for="PricePerNight" class="form-control" />
+        <span asp-validation-for="PricePerNight"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="PhoneNumber" class="form-label"></label>
+        <input asp-for="PhoneNumber" class="form-control" placeholder="+359 888 123 456" />
+        <span asp-validation-for="PhoneNumber"></span>
+    </div>
+
+    <div class="col-12">
+        <label asp-for="ImageUrl" class="form-label"></label>
+        <input asp-for="ImageUrl" class="form-control" placeholder="https://..." />
+        <span asp-validation-for="ImageUrl"></span>
+    </div>
+
+    <div class="col-12 d-flex flex-wrap gap-4">
+        <div class="form-check">
+            <input asp-for="HasWater" class="form-check-input" />
+            <label asp-for="HasWater" class="form-check-label"></label>
+        </div>
+        <div class="form-check">
+            <input asp-for="HasElectricity" class="form-check-input" />
+            <label asp-for="HasElectricity" class="form-check-label"></label>
+        </div>
+        <div class="form-check">
+            <input asp-for="HasFood" class="form-check-input" />
+            <label asp-for="HasFood" class="form-check-label"></label>
+        </div>
+    </div>
+</div>
