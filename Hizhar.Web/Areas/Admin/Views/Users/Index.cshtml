@@ -1,0 +1,35 @@
+﻿@model IEnumerable<UserListItemViewModel>
+@{
+    ViewData["Title"] = "Потребители";
+}
+
+<h1 class="mb-3">Потребители</h1>
+
+<div class="hz-panel p-0 table-responsive">
+    <table class="table align-middle mb-0">
+        <thead>
+            <tr><th>Email</th><th>Роли</th><th>Хижа</th><th>Резервации</th><th>Ревюта</th></tr>
+        </thead>
+        <tbody>
+            @foreach (UserListItemViewModel user in Model)
+            {
+                <tr>
+                    <td>@user.Email</td>
+                    <td>
+                        @if (!user.Roles.Any())
+                        {
+                            <span class="badge bg-light text-dark">Турист</span>
+                        }
+                        @foreach (string role in user.Roles)
+                        {
+                            <span class="badge @(role == RoleConstants.Administrator ? "bg-danger" : "bg-success")">@role</span>
+                        }
+                    </td>
+                    <td>@(user.OwnedHutName ?? "—")</td>
+                    <td>@user.ReservationsCount</td>
+                    <td>@user.ReviewsCount</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

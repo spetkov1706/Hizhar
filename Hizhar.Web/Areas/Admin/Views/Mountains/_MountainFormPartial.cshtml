@@ -1,0 +1,19 @@
+﻿@model MountainFormModel
+
+<div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+<div class="mb-3">
+    <label asp-for="Name" class="form-label"></label>
+    <input asp-for="Name" class="form-control" />
+    <span asp-validation-for="Name"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="Description" class="form-label"></label>
+    <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+    <span asp-validation-for="Description"></span>
+</div>
+<div class="mb-3">
+    <label asp-for="ImageUrl" class="form-label"></label>
+    <input asp-for="ImageUrl" class="form-control" placeholder="https://..." />
+    <span asp-validation-for="ImageUrl"></span>
+</div>

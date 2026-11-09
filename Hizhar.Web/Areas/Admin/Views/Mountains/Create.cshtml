@@ -1,0 +1,16 @@
+﻿@model MountainFormModel
+@{
+    ViewData["Title"] = "Нова планина";
+}
+
+<h1 class="mb-3">Нова планина</h1>
+
+<form method="post" asp-action="Create" class="hz-panel">
+    <partial name="_MountainFormPartial" model="Model" />
+    <button type="submit" class="btn btn-hz"><i class="bi bi-plus-lg"></i> Създай</button>
+    <a asp-action="Index" class="btn btn-link">Отказ</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

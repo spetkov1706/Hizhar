@@ -1,0 +1,45 @@
+﻿@model PeakFormModel
+
+<div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="MountainId" class="form-label"></label>
+        <select asp-for="MountainId" class="form-select"
+                asp-items="@(new SelectList(Model.Mountains, nameof(MountainOptionViewModel.Id), nameof(MountainOptionViewModel.Name)))">
+            <option value="0">-- Изберете --</option>
+        </select>
+        <span asp-validation-for="MountainId"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="Elevation" class="form-label"></label>
+        <input asp-for="Elevation" class="form-control" />
+        <span asp-validation-for="Elevation"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="Latitude" class="form-label"></label>
+        <input asp-for="Latitude" class="form-control" />
+        <span asp-validation-for="Latitude"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="Longitude" class="form-label"></label>
+        <input asp-for="Longitude" class="form-control" />
+        <span asp-validation-for="Longitude"></span>
+    </div>
+    <div class="col-12">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Description"></span>
+    </div>
+    <div class="col-12">
+        <div class="form-check">
+            <input asp-for="IsNationalTouristSite" class="form-check-input" />
+            <label asp-for="IsNationalTouristSite" class="form-check-label"></label>
+        </div>
+    </div>
+</div>

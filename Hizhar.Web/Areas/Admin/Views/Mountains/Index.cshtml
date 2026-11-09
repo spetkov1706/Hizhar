@@ -1,0 +1,35 @@
+﻿@model IEnumerable<MountainIndexViewModel>
+@{
+    ViewData["Title"] = "Планини – админ";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Планини</h1>
+    <a asp-action="Create" class="btn btn-hz"><i class="bi bi-plus-lg"></i> Нова планина</a>
+</div>
+
+<div class="hz-panel p-0 table-responsive">
+    <table class="table align-middle mb-0">
+        <thead>
+            <tr><th>Име</th><th>Хижи</th><th>Върхове</th><th>Маршрути</th><th class="text-end">Действия</th></tr>
+        </thead>
+        <tbody>
+            @foreach (MountainIndexViewModel mountain in Model)
+            {
+                <tr>
+                    <td><a asp-area="" asp-controller="Mountains" asp-action="Details" asp-route-id="@mountain.Id">@mountain.Name</a></td>
+                    <td>@mountain.HutsCount</td>
+                    <td>@mountain.PeaksCount</td>
+                    <td>@mountain.TrailsCount</td>
+                    <td class="text-end text-nowrap">
+                        <a asp-action="Edit" asp-route-id="@mountain.Id" class="btn btn-sm btn-outline-hz"><i class="bi bi-pencil"></i></a>
+                        <form method="post" asp-action="Delete" asp-route-id="@mountain.Id" class="d-inline"
+                              data-confirm="Да изтрия ли планината „@mountain.Name“?">
+                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

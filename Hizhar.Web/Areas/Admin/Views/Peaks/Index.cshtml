@@ -1,0 +1,35 @@
+﻿@model IEnumerable<PeakListItemViewModel>
+@{
+    ViewData["Title"] = "Върхове – админ";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Върхове</h1>
+    <a asp-action="Create" class="btn btn-hz"><i class="bi bi-plus-lg"></i> Нов връх</a>
+</div>
+
+<div class="hz-panel p-0 table-responsive">
+    <table class="table align-middle mb-0">
+        <thead>
+            <tr><th>Връх</th><th>Планина</th><th>Височина</th><th>НТО</th><th class="text-end">Действия</th></tr>
+        </thead>
+        <tbody>
+            @foreach (PeakListItemViewModel peak in Model)
+            {
+                <tr>
+                    <td><a asp-area="" asp-controller="Peaks" asp-action="Details" asp-route-id="@peak.Id">@peak.Name</a></td>
+                    <td>@peak.MountainName</td>
+                    <td>@peak.Elevation м</td>
+                    <td>@(peak.IsNationalTouristSite ? "Да" : "—")</td>
+                    <td class="text-end text-nowrap">
+                        <a asp-action="Edit" asp-route-id="@peak.Id" class="btn btn-sm btn-outline-hz"><i class="bi bi-pencil"></i></a>
+                        <form method="post" asp-action="Delete" asp-route-id="@peak.Id" class="d-inline"
+                              data-confirm="Да изтрия ли връх „@peak.Name“? Изкачванията му също ще бъдат изтрити.">
+                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
