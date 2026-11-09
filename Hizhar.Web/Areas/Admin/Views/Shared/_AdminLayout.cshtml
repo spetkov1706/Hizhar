@@ -1,0 +1,32 @@
+﻿@{
+    Layout = "/Views/Shared/_Layout.cshtml";
+    string? currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+}
+
+<div class="row g-4 mt-1">
+    <aside class="col-lg-2">
+        <div class="hz-panel p-2">
+            <div class="small text-muted px-2 pt-1 pb-2 text-uppercase fw-semibold">Админ панел</div>
+            <nav class="nav flex-column hz-admin-nav">
+                <a class="nav-link @(currentController == "Home" ? "active" : "")" asp-area="Admin" asp-controller="Home" asp-action="Index"><i class="bi bi-speedometer2"></i> Табло</a>
+                <a class="nav-link @(currentController == "Huts" ? "active" : "")" asp-area="Admin" asp-controller="Huts" asp-action="Index"><i class="bi bi-house"></i> Хижи</a>
+                <a class="nav-link @(currentController == "Mountains" ? "active" : "")" asp-area="Admin" asp-controller="Mountains" asp-action="Index"><i class="bi bi-image-alt"></i> Планини</a>
+                <a class="nav-link @(currentController == "Peaks" ? "active" : "")" asp-area="Admin" asp-controller="Peaks" asp-action="Index"><i class="bi bi-triangle"></i> Върхове</a>
+                <a class="nav-link @(currentController == "Trails" ? "active" : "")" asp-area="Admin" asp-controller="Trails" asp-action="Index"><i class="bi bi-signpost-split"></i> Маршрути</a>
+                <a class="nav-link @(currentController == "HutKeeperRequests" ? "active" : "")" asp-area="Admin" asp-controller="HutKeeperRequests" asp-action="Index"><i class="bi bi-key"></i> Заявки за хижари</a>
+                <a class="nav-link @(currentController == "Moderation" ? "active" : "")" asp-area="Admin" asp-controller="Moderation" asp-action="Index"><i class="bi bi-shield-check"></i> Модерация</a>
+                <a class="nav-link @(currentController == "Users" ? "active" : "")" asp-area="Admin" asp-controller="Users" asp-action="Index"><i class="bi bi-people"></i> Потребители</a>
+            </nav>
+        </div>
+    </aside>
+    <section class="col-lg-10">
+        @RenderBody()
+    </section>
+</div>
+
+@section Styles {
+    @await RenderSectionAsync("Styles", required: false)
+}
+@section Scripts {
+    @await RenderSectionAsync("Scripts", required: false)
+}

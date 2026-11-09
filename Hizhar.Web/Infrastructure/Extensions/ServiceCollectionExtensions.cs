@@ -12,6 +12,8 @@ namespace Hizhar.Web.Infrastructure.Extensions
             services.AddScoped<IHutService, HutService>();
             services.AddScoped<IPeakService, PeakService>();
 
+            services.AddScoped<IAdminService, AdminService>();
+
             return services;
         }
     }

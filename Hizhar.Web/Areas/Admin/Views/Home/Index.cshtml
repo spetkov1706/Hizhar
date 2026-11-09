@@ -1,0 +1,25 @@
+﻿@model AdminDashboardViewModel
+@{
+    ViewData["Title"] = "Админ табло";
+}
+
+<h1 class="mb-4">Табло</h1>
+
+@if (Model.PendingRequestsCount > 0)
+{
+    <div class="alert alert-warning d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-key"></i> Има <strong>@Model.PendingRequestsCount</strong> чакащи заявки за хижари.</span>
+        <a asp-controller="HutKeeperRequests" asp-action="Index" class="btn btn-sm btn-warning">Прегледай</a>
+    </div>
+}
+
+<div class="row g-3">
+    <div class="col-6 col-md-4 col-xl-3"><div class="hz-stat"><div class="number">@Model.MountainsCount</div><div class="label">планини</div></div></div>
+    <div class="col-6 col-md-4 col-xl-3"><div class="hz-stat"><div class="number">@Model.HutsCount</div><div class="label">хижи</div></div></div>
+    <div class="col-6 col-md-4 col-xl-3"><div class="hz-stat"><div class="number">@Model.PeaksCount</div><div class="label">върха</div></div></div>
+    <div class="col-6 col-md-4 col-xl-3"><div class="hz-stat"><div class="number">@Model.TrailsCount</div><div class="label">маршрута</div></div></div>
+    <div class="col-6 col-md-4 col-xl-3"><div class="hz-stat"><div class="number">@Model.UsersCount</div><div class="label">потребители</div></div></div>
+    <div class="col-6 col-md-4 col-xl-3"><div class="hz-stat"><div class="number">@Model.ReservationsCount</div><div class="label">резервации</div></div></div>
+    <div class="col-6 col-md-4 col-xl-3"><div class="hz-stat"><div class="number">@Model.ReviewsCount</div><div class="label">ревюта</div></div></div>
+    <div class="col-6 col-md-4 col-xl-3"><div class="hz-stat"><div class="number">@(Model.PhotosCount + Model.ConditionsCount)</div><div class="label">снимки и доклади</div></div></div>
+</div>
