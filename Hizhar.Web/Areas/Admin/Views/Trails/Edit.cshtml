@@ -1,0 +1,16 @@
+﻿@model TrailFormModel
+@{
+    ViewData["Title"] = "Редакция на маршрут";
+}
+
+<h1 class="mb-3">Редакция: @Model.Name</h1>
+
+<form method="post" class="hz-panel">
+    <partial name="_TrailFormPartial" model="Model" />
+    <button type="submit" class="btn btn-hz mt-4"><i class="bi bi-save"></i> Запази</button>
+    <a asp-action="Index" class="btn btn-link mt-4">Отказ</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

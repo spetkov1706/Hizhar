@@ -1,0 +1,36 @@
+﻿@model IEnumerable<TrailCardViewModel>
+@{
+    ViewData["Title"] = "Маршрути – админ";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Маршрути</h1>
+    <a asp-action="Create" class="btn btn-hz"><i class="bi bi-plus-lg"></i> Нов маршрут</a>
+</div>
+
+<div class="hz-panel p-0 table-responsive">
+    <table class="table align-middle mb-0">
+        <thead>
+            <tr><th>Маршрут</th><th>Планина</th><th>Км</th><th>Трудност</th><th>Доклади</th><th class="text-end">Действия</th></tr>
+        </thead>
+        <tbody>
+            @foreach (TrailCardViewModel trail in Model)
+            {
+                <tr>
+                    <td><a asp-area="" asp-controller="Trails" asp-action="Details" asp-route-id="@trail.Id">@trail.Name</a></td>
+                    <td>@trail.MountainName</td>
+                    <td>@trail.LengthKm.ToString("0.#")</td>
+                    <td><partial name="_DifficultyBadgePartial" model="trail.Difficulty" /></td>
+                    <td>@trail.ReportsCount</td>
+                    <td class="text-end text-nowrap">
+                        <a asp-action="Edit" asp-route-id="@trail.Id" class="btn btn-sm btn-outline-hz"><i class="bi bi-pencil"></i></a>
+                        <form method="post" asp-action="Delete" asp-route-id="@trail.Id" class="d-inline"
+                              data-confirm="Да изтрия ли маршрута „@trail.Name“ заедно с точките и докладите му?">
+                            <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

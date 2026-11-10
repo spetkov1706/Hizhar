@@ -1,0 +1,60 @@
+﻿@model TrailFormModel
+
+<div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+<div class="row g-3">
+    <div class="col-md-8">
+        <label asp-for="Name" class="form-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="MountainId" class="form-label"></label>
+        <select asp-for="MountainId" class="form-select"
+                asp-items="@(new SelectList(Model.Mountains, nameof(MountainOptionViewModel.Id), nameof(MountainOptionViewModel.Name)))">
+            <option value="0">-- Изберете --</option>
+        </select>
+        <span asp-validation-for="MountainId"></span>
+    </div>
+    <div class="col-12">
+        <label asp-for="Description" class="form-label"></label>
+        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Description"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="LengthKm" class="form-label"></label>
+        <input asp-for="LengthKm" class="form-control" />
+        <span asp-validation-for="LengthKm"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="ElevationGain" class="form-label"></label>
+        <input asp-for="ElevationGain" class="form-control" />
+        <span asp-validation-for="ElevationGain"></span>
+    </div>
+    <div class="col-md-4">
+        <label asp-for="DurationMinutes" class="form-label"></label>
+        <input asp-for="DurationMinutes" class="form-control" />
+        <span asp-validation-for="DurationMinutes"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="Difficulty" class="form-label"></label>
+        <select asp-for="Difficulty" class="form-select" asp-items="Html.GetEnumSelectList<Difficulty>()"></select>
+        <span asp-validation-for="Difficulty"></span>
+    </div>
+    <div class="col-md-6">
+        <label asp-for="Season" class="form-label"></label>
+        <select asp-for="Season" class="form-select" asp-items="Html.GetEnumSelectList<Season>()"></select>
+        <span asp-validation-for="Season"></span>
+    </div>
+    <div class="col-12">
+        <label asp-for="PointsText" class="form-label"></label>
+        <textarea asp-for="PointsText" class="form-control font-monospace" rows="6"
+                  placeholder="Хижа „Мусала“; 42.1931; 23.5836; Hut&#10;Връх Мусала; 42.1795; 23.5852; Peak"></textarea>
+        <div class="form-text">
+            По една точка на ред: <code>Име; ширина; дължина; тип</code>.
+            Типът е <code>Trailhead</code>, <code>Hut</code>, <code>Peak</code> или <code>Waypoint</code>.
+            Първият ред е началото, последният – краят. Използвайте точка за десетичен знак.
+        </div>
+        <span asp-validation-for="PointsText"></span>
+    </div>
+</div>
