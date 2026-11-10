@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Hizhar.Web.Controllers
 {
-    [Autorize]
+    [Authorize]
     public class TrailConditionsController : Controller
     {
         private readonly ITrailConditionService trailConditionService;
