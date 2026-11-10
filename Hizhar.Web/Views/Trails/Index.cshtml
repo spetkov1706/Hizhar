@@ -1,0 +1,58 @@
+﻿@model AllTrailsQueryModel
+@{
+    ViewData["Title"] = "Маршрути";
+}
+
+<div class="hz-page-header">
+    <h1>Маршрути</h1>
+    <p class="subtitle">Пътеки между хижи, върхове и изходни пунктове – с дължина, денивелация и трудност.</p>
+</div>
+
+<form method="get" asp-action="Index" class="hz-filters mb-4">
+    <div class="row g-3 align-items-end">
+        <div class="col-md-3">
+            <label asp-for="SearchTerm" class="form-label"></label>
+            <input asp-for="SearchTerm" class="form-control" placeholder="Име или точка..." />
+        </div>
+        <div class="col-md-2">
+            <label asp-for="MountainId" class="form-label"></label>
+            <select asp-for="MountainId" class="form-select"
+                    asp-items="@(new SelectList(Model.Mountains, nameof(MountainOptionViewModel.Id), nameof(MountainOptionViewModel.Name)))">
+                <option value="">Всички</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label asp-for="Difficulty" class="form-label"></label>
+            <select asp-for="Difficulty" class="form-select" asp-items="Html.GetEnumSelectList<Difficulty>()">
+                <option value="">Всякаква</option>
+            </select>
+        </div>
+        <div class="col-md-2">
+            <label asp-for="Season" class="form-label"></label>
+            <select asp-for="Season" class="form-select" asp-items="Html.GetEnumSelectList<Season>()">
+                <option value="">Всеки</option>
+            </select>
+        </div>
+        <div class="col-md-1">
+            <label asp-for="MaxLengthKm" class="form-label small"></label>
+            <input asp-for="MaxLengthKm" class="form-control" type="number" min="0" step="0.5" />
+        </div>
+        <div class="col-md-2 d-grid">
+            <button type="submit" class="btn btn-hz"><i class="bi bi-search"></i> Търси</button>
+        </div>
+    </div>
+</form>
+
+@if (!Model.Trails.Any())
+{
+    <div class="hz-panel text-center text-muted">Няма маршрути, които отговарят на филтрите.</div>
+}
+
+<div class="row g-4">
+    @foreach (TrailCardViewModel trail in Model.Trails)
+    {
+        <div class="col-md-6 col-lg-4">
+            <partial name="_TrailCardPartial" model="trail" />
+        </div>
+    }
+</div>

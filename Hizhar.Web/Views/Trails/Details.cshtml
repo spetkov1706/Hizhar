@@ -1,0 +1,109 @@
+﻿@model TrailDetailsViewModel
+@using System.Text.Json
+@{
+    ViewData["Title"] = Model.Name;
+    bool isSignedIn = User.Identity?.IsAuthenticated == true;
+    string pointsJson = JsonSerializer.Serialize(Model.Points.Select(p => new[] { p.Latitude, p.Longitude }));
+}
+
+@section Styles {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+}
+
+<div class="hz-page-header">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index">Маршрути</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Mountains" asp-action="Details" asp-route-id="@Model.MountainId">@Model.MountainName</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+        </ol>
+    </nav>
+    <h1>@Model.Name</h1>
+    <div class="d-flex flex-wrap gap-2 align-items-center">
+        <partial name="_DifficultyBadgePartial" model="Model.Difficulty" />
+        <span class="badge bg-light text-dark">@Model.Season.GetDisplayName()</span>
+    </div>
+</div>
+
+<div class="row g-3 mb-2">
+    <div class="col-6 col-md-3"><div class="hz-stat"><div class="number">@Model.LengthKm.ToString("0.#")</div><div class="label">километра</div></div></div>
+    <div class="col-6 col-md-3"><div class="hz-stat"><div class="number">+@Model.ElevationGain</div><div class="label">м денивелация</div></div></div>
+    <div class="col-6 col-md-3"><div class="hz-stat"><div class="number fs-4">@Model.DurationText</div><div class="label">приблизително време</div></div></div>
+    <div class="col-6 col-md-3"><div class="hz-stat"><div class="number">@Model.Points.Count()</div><div class="label">точки по пътя</div></div></div>
+</div>
+
+<div class="row g-4 mt-1">
+    <div class="col-lg-7">
+        <div class="hz-panel">
+            <h4>Описание</h4>
+            <p class="mb-0">@Model.Description</p>
+        </div>
+
+        <div class="hz-panel">
+            <h4>Актуални условия</h4>
+            <p class="small text-muted">Най-новите доклади са най-отгоре. Зелено = до 2 дни, жълто = до седмица, сиво = по-стари.</p>
+
+            @if (!Model.Conditions.Any())
+            {
+                <p class="text-muted">Все още няма доклади за този маршрут.</p>
+            }
+            @foreach (TrailConditionViewModel condition in Model.Conditions)
+            {
+                <partial name="_ConditionPartial" model="condition" />
+            }
+
+            @if (isSignedIn)
+            {
+                <h5 class="mt-4">Докладвай състоянието</h5>
+                <form method="post" asp-controller="TrailConditions" asp-action="Create">
+                    <input type="hidden" asp-for="NewCondition.TrailId" />
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="row g-2">
+                        <div class="col-md-4">
+                            <label asp-for="NewCondition.ConditionType" class="form-label"></label>
+                            <select asp-for="NewCondition.ConditionType" class="form-select" asp-items="Html.GetEnumSelectList<ConditionType>()"></select>
+                            <span asp-validation-for="NewCondition.ConditionType"></span>
+                        </div>
+                        <div class="col-md-8">
+                            <label asp-for="NewCondition.Description" class="form-label"></label>
+                            <textarea asp-for="NewCondition.Description" class="form-control" rows="2"
+                                      placeholder="напр. Над 2000 м има заледявания, нужни са котки."></textarea>
+                            <span asp-validation-for="NewCondition.Description"></span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-hz mt-2"><i class="bi bi-megaphone"></i> Изпрати доклад</button>
+                </form>
+            }
+            else
+            {
+                <p class="small mt-3 mb-0">
+                    <a asp-area="Identity" asp-page="/Account/Login">Влезте</a>, за да докладвате състоянието на пътеката.
+                </p>
+            }
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="hz-panel">
+            <h5><i class="bi bi-map"></i> Карта на маршрута</h5>
+            <div class="hz-mini-map mb-3" data-points="@pointsJson"></div>
+
+            <h5>Точки по маршрута</h5>
+            <ol class="hz-timeline mb-0">
+                @foreach (TrailPointViewModel point in Model.Points)
+                {
+                    <li>
+                        <strong>@point.Name</strong>
+                        <div class="small text-muted">@point.PointType.GetDisplayName()</div>
+                    </li>
+                }
+            </ol>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="~/js/mini-map.js" asp-append-version="true"></script>
+}
