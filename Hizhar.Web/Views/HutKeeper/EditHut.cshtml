@@ -1,0 +1,70 @@
+﻿@model HutKeeperHutFormModel
+@{
+    ViewData["Title"] = "Редакция на хижата";
+}
+
+<div class="hz-page-header">
+    <h1>Редакция: @Model.Name</h1>
+    <p class="subtitle">Името, планината и координатите се променят само от администратор.</p>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <form method="post" asp-action="EditHut" class="hz-panel">
+            <input type="hidden" asp-for="Name" />
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label"></label>
+                <textarea asp-for="Description" class="form-control" rows="5"></textarea>
+                <span asp-validation-for="Description"></span>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label asp-for="BedsCount" class="form-label"></label>
+                    <input asp-for="BedsCount" class="form-control" />
+                    <span asp-validation-for="BedsCount"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="PricePerNight" class="form-label"></label>
+                    <input asp-for="PricePerNight" class="form-control" step="0.01" />
+                    <span asp-validation-for="PricePerNight"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="PhoneNumber" class="form-label"></label>
+                    <input asp-for="PhoneNumber" class="form-control" placeholder="+359 888 123 456" />
+                    <span asp-validation-for="PhoneNumber"></span>
+                </div>
+            </div>
+
+            <div class="mt-3">
+                <label asp-for="ImageUrl" class="form-label"></label>
+                <input asp-for="ImageUrl" class="form-control" placeholder="https://..." />
+                <span asp-validation-for="ImageUrl"></span>
+            </div>
+
+            <div class="d-flex gap-4 mt-3">
+                <div class="form-check">
+                    <input asp-for="HasWater" class="form-check-input" />
+                    <label asp-for="HasWater" class="form-check-label"></label>
+                </div>
+                <div class="form-check">
+                    <input asp-for="HasElectricity" class="form-check-input" />
+                    <label asp-for="HasElectricity" class="form-check-label"></label>
+                </div>
+                <div class="form-check">
+                    <input asp-for="HasFood" class="form-check-input" />
+                    <label asp-for="HasFood" class="form-check-label"></label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-hz mt-4"><i class="bi bi-save"></i> Запази</button>
+            <a asp-action="Dashboard" class="btn btn-link mt-4">Отказ</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

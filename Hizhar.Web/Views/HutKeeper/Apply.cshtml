@@ -1,0 +1,51 @@
+﻿@model HutKeeperRequestFormModel
+@{
+    ViewData["Title"] = "Стани хижар";
+}
+
+<div class="hz-page-header">
+    <h1>Стани хижар</h1>
+    <p class="subtitle">Изберете хижата, която управлявате. Администратор ще прегледа заявката ви.</p>
+</div>
+
+<div class="row">
+    <div class="col-lg-7">
+        <div class="hz-panel">
+            @if (!Model.Huts.Any())
+            {
+                <p class="mb-0">В момента всички хижи вече имат хижар.</p>
+            }
+            else
+            {
+                <form method="post" asp-action="Apply">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="HutId" class="form-label"></label>
+                        <select asp-for="HutId" class="form-select">
+                            <option value="0">-- Изберете хижа --</option>
+                            @foreach (HutOptionViewModel hut in Model.Huts)
+                            {
+                                <option value="@hut.Id">@hut.Name (@hut.MountainName)</option>
+                            }
+                        </select>
+                        <span asp-validation-for="HutId"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Message" class="form-label"></label>
+                        <textarea asp-for="Message" class="form-control" rows="4"
+                                  placeholder="Разкажете накратко кой сте и как можем да проверим, че управлявате хижата."></textarea>
+                        <span asp-validation-for="Message"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-hz"><i class="bi bi-send"></i> Изпрати заявка</button>
+                </form>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

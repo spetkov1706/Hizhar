@@ -19,6 +19,8 @@ namespace Hizhar.Web.Infrastructure.Extensions
 
             services.AddScoped<IReservationService, ReservationService>();
 
+            services.AddScoped<IHutKeeperService, HutKeeperService>();
+
             return services;
         }
     }

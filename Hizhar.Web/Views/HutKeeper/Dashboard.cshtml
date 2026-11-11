@@ -1,0 +1,88 @@
+﻿@model HutKeeperDashboardViewModel
+@{
+    ViewData["Title"] = "Моята хижа";
+}
+
+<div class="hz-page-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+    <div>
+        <h1 class="mb-0">@Model.HutName</h1>
+        <p class="subtitle mb-0">Табло на хижаря</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-controller="Huts" asp-action="Details" asp-route-id="@Model.HutId" class="btn btn-outline-hz"><i class="bi bi-eye"></i> Публична страница</a>
+        <a asp-action="EditHut" class="btn btn-hz"><i class="bi bi-pencil"></i> Редактирай хижата</a>
+    </div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-md-4"><div class="hz-stat"><div class="number">@Model.BedsCount</div><div class="label">легла общо</div></div></div>
+    <div class="col-md-4"><div class="hz-stat"><div class="number">@Model.FreeBedsTonight</div><div class="label">свободни тази вечер</div></div></div>
+    <div class="col-md-4"><div class="hz-stat"><div class="number text-warning">@Model.PendingReservations.Count()</div><div class="label">чакат потвърждение</div></div></div>
+</div>
+
+<div class="hz-panel">
+    <h4><i class="bi bi-hourglass-split"></i> Чакащи резервации</h4>
+    @if (!Model.PendingReservations.Any())
+    {
+        <p class="text-muted mb-0">Няма чакащи резервации.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr><th>Турист</th><th>Дати</th><th>Легла</th><th>Бележка</th><th class="text-end">Действия</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (ReservationListItemViewModel reservation in Model.PendingReservations)
+                    {
+                        <tr>
+                            <td>@reservation.GuestEmail</td>
+                            <td>@reservation.CheckIn.ToString("dd.MM.yyyy") – @reservation.CheckOut.ToString("dd.MM.yyyy")</td>
+                            <td>@reservation.Guests</td>
+                            <td class="small">@reservation.Note</td>
+                            <td class="text-end text-nowrap">
+                                <form method="post" asp-action="Confirm" asp-route-id="@reservation.Id" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-success"><i class="bi bi-check-lg"></i> Потвърди</button>
+                                </form>
+                                <form method="post" asp-action="Reject" asp-route-id="@reservation.Id" class="d-inline"
+                                      data-confirm="Да откажа ли тази резервация?">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger"><i class="bi bi-x-lg"></i> Откажи</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
+
+<div class="hz-panel">
+    <h4><i class="bi bi-calendar-check"></i> Предстоящи потвърдени</h4>
+    @if (!Model.UpcomingReservations.Any())
+    {
+        <p class="text-muted mb-0">Няма предстоящи потвърдени резервации.</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr><th>Турист</th><th>Дати</th><th>Легла</th><th>Сума</th></tr>
+                </thead>
+                <tbody>
+                    @foreach (ReservationListItemViewModel reservation in Model.UpcomingReservations)
+                    {
+                        <tr>
+                            <td>@reservation.GuestEmail</td>
+                            <td>@reservation.CheckIn.ToString("dd.MM.yyyy") – @reservation.CheckOut.ToString("dd.MM.yyyy")</td>
+                            <td>@reservation.Guests</td>
+                            <td>@reservation.TotalPrice.ToString("0.00") лв.</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+</div>
