@@ -17,6 +17,8 @@ namespace Hizhar.Web.Infrastructure.Extensions
             services.AddScoped<ITrailService, TrailService>();
             services.AddScoped<ITrailConditionService, TrailConditionService>();
 
+            services.AddScoped<IReservationService, ReservationService>();
+
             return services;
         }
     }
