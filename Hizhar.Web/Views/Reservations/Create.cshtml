@@ -1,0 +1,80 @@
+﻿@model ReservationFormModel
+@{
+    ViewData["Title"] = "Нова резервация";
+}
+
+<div class="hz-page-header">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-controller="Huts" asp-action="Index">Хижи</a></li>
+            <li class="breadcrumb-item"><a asp-controller="Huts" asp-action="Details" asp-route-id="@Model.HutId">@Model.HutName</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Резервация</li>
+        </ol>
+    </nav>
+    <h1>Резервация в @Model.HutName</h1>
+    <p class="subtitle">
+        Капацитет: @Model.BedsCount легла · Цена: @Model.PricePerNight.ToString("0.00") лв. на легло за нощ
+    </p>
+</div>
+
+<div class="row">
+    <div class="col-lg-7">
+        <div class="hz-panel">
+            <form method="post" asp-action="Create" id="reservation-form"
+                  data-hut-id="@Model.HutId"
+                  data-price="@Model.PricePerNight.ToString(System.Globalization.CultureInfo.InvariantCulture)">
+                <input type="hidden" asp-for="HutId" />
+
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="CheckIn" class="form-label"></label>
+                        <input asp-for="CheckIn" class="form-control" />
+                        <span asp-validation-for="CheckIn"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="CheckOut" class="form-label"></label>
+                        <input asp-for="CheckOut" class="form-control" />
+                        <span asp-validation-for="CheckOut"></span>
+                    </div>
+                    <div class="col-md-6">
+                        <label asp-for="Guests" class="form-label"></label>
+                        <input asp-for="Guests" class="form-control" type="number" min="1" />
+                        <span asp-validation-for="Guests"></span>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-end">
+                        <div>
+                            <div id="free-beds-info"></div>
+                            <div id="total-price-info" class="small text-muted"></div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <label asp-for="Note" class="form-label"></label>
+                        <textarea asp-for="Note" class="form-control" rows="3" placeholder="напр. Пристигаме късно вечерта."></textarea>
+                        <span asp-validation-for="Note"></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-sunset mt-3"><i class="bi bi-calendar-check"></i> Изпрати резервация</button>
+                <a asp-controller="Huts" asp-action="Details" asp-route-id="@Model.HutId" class="btn btn-link mt-3">Отказ</a>
+            </form>
+        </div>
+    </div>
+    <div class="col-lg-5">
+        <div class="hz-panel">
+            <h5><i class="bi bi-info-circle"></i> Как работи?</h5>
+            <ul class="small mb-0">
+                <li>Нощувката се брои от датата на пристигане до датата на напускане (без нея).</li>
+                <li>Системата проверява всяка нощ – не може да резервирате повече легла, отколкото са свободни.</li>
+                <li>Резервацията е „чакаща“, докато хижарят не я потвърди.</li>
+                <li>Може да я анулирате до деня преди пристигане.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/reservation.js" asp-append-version="true"></script>
+}

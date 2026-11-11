@@ -9,11 +9,16 @@ namespace Hizhar.Web.Controllers
     {
         private readonly IHutService hutService;
         private readonly IMountainService mountainService;
+        private readonly IReservationService reservationService;
 
-        public HutsController(IHutService hutService, IMountainService mountainService)
+        public HutsController(
+            IHutService hutService,
+            IMountainService mountainService,
+            IReservationService reservationService)
         {
             this.hutService = hutService;
             this.mountainService = mountainService;
+            this.reservationService = reservationService;
         }
 
         [HttpGet]
@@ -37,6 +42,9 @@ namespace Hizhar.Web.Controllers
             {
                 return NotFound();
             }
+
+            DateTime today = DateTime.Today;
+            model.FreeBedsTonight = await reservationService.GetFreeBedsAsync(id, today, today.AddDays(1));
 
             return View(model);
         }
