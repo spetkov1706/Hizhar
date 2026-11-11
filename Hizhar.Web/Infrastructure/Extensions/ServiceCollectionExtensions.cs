@@ -21,6 +21,8 @@ namespace Hizhar.Web.Infrastructure.Extensions
 
             services.AddScoped<IHutKeeperService, HutKeeperService>();
 
+            services.AddScoped<IReviewService, ReviewService>();
+
             return services;
         }
     }
