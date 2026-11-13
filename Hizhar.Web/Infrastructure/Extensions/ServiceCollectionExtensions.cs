@@ -25,6 +25,9 @@ namespace Hizhar.Web.Infrastructure.Extensions
 
             services.AddScoped<IPhotoService, PhotoService>();
 
+            services.AddScoped<IFavoriteService, FavoriteService>();
+            services.AddScoped<IClimbedPeakService, ClimbedPeakService>();
+
             return services;
         }
     }

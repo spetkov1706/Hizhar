@@ -1,6 +1,8 @@
 ﻿@model HutDetailsViewModel
 @{
     ViewData["Title"] = Model.Name;
+    bool isSignedIn = User.Identity?.IsAuthenticated == true;
+    string? currentUserId = User.GetId();
 }
 
 @section Styles {
@@ -15,11 +17,22 @@
             <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
         </ol>
     </nav>
-     <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
         <h1 class="mb-0">@Model.Name</h1>
-        <a asp-controller="Reservations" asp-action="Create" asp-route-hutId="@Model.Id" class="btn btn-sunset">
-            <i class="bi bi-calendar-plus"></i> Резервирай
-        </a>
+        <div class="d-flex gap-2">
+            @if (isSignedIn)
+            {
+                <form method="post" asp-controller="Favorites" asp-action="Toggle" asp-route-hutId="@Model.Id">
+                    <button type="submit" class="btn @(Model.IsFavorite ? "btn-danger" : "btn-outline-danger")">
+                        <i class="bi @(Model.IsFavorite ? "bi-heart-fill" : "bi-heart")"></i>
+                        @(Model.IsFavorite ? "В любими" : "Добави в любими")
+                    </button>
+                </form>
+            }
+            <a asp-controller="Reservations" asp-action="Create" asp-route-hutId="@Model.Id" class="btn btn-sunset">
+                <i class="bi bi-calendar-plus"></i> Резервирай
+            </a>
+        </div>
     </div>
 </div>
 
@@ -39,7 +52,6 @@
             <p class="mb-0">@Model.Description</p>
         </div>
 
-        @* ---------- Ревюта ---------- *@
         <div class="hz-panel">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="mb-0">Ревюта (@Model.ReviewsCount)</h4>
@@ -48,6 +60,11 @@
                     <strong>@Model.AverageRating.ToString("0.0")</strong>
                 </span>
             </div>
+
+            @if (isSignedIn && !Model.HasReviewed)
+            {
+                <partial name="_ReviewFormPartial" model="new ReviewFormModel { HutId = Model.Id }" />
+            }
 
             @if (!Model.Reviews.Any())
             {
@@ -65,12 +82,24 @@
                         <small class="text-muted">@review.CreatedOn.ToLocalTime().ToString("dd.MM.yyyy")</small>
                     </div>
                     <p class="mb-1 mt-1">@review.Content</p>
+                    @if (review.AuthorId == currentUserId || User.IsAdmin())
+                    {
+                        <form method="post" asp-controller="Reviews" asp-action="Delete" asp-route-id="@review.Id"
+                              data-confirm="Да изтрия ли ревюто?">
+                            <button type="submit" class="btn btn-link btn-sm text-danger p-0">Изтрий</button>
+                        </form>
+                    }
                 </div>
             }
         </div>
 
         <div class="hz-panel">
             <h4>Снимки от туристи (@Model.Photos.Count())</h4>
+
+            @if (isSignedIn)
+            {
+                <partial name="_PhotoUploadPartial" model="new PhotoUploadFormModel { HutId = Model.Id }" />
+            }
 
             @if (!Model.Photos.Any())
             {
@@ -88,6 +117,13 @@
                             @photo.Caption
                             <span class="text-muted">– @photo.AuthorName</span>
                         </div>
+                        @if (photo.AuthorId == currentUserId || User.IsAdmin())
+                        {
+                            <form method="post" asp-controller="Photos" asp-action="Delete" asp-route-id="@photo.Id"
+                                  data-confirm="Да изтрия ли снимката?">
+                                <button type="submit" class="btn btn-link btn-sm text-danger p-0">Изтрий</button>
+                            </form>
+                        }
                     </div>
                 }
             </div>
@@ -99,7 +135,10 @@
             <ul class="list-unstyled mb-0">
                 <li class="mb-2"><i class="bi bi-arrow-up-right-circle text-success"></i> <strong>@Model.Altitude м</strong> надморска височина</li>
                 <li class="mb-2"><i class="bi bi-moon-stars text-success"></i> <strong>@Model.BedsCount</strong> легла общо</li>
-                <li class="mb-2"><i class="bi bi-door-open text-success"></i>Свободни тази вечер: <strong class="@(Model.FreeBedsTonight > 0 ? "text-success" : "text-danger")">@Model.FreeBedsTonight</strong></li>
+                <li class="mb-2">
+                    <i class="bi bi-door-open text-success"></i>
+                    Свободни тази вечер: <strong class="@(Model.FreeBedsTonight > 0 ? "text-success" : "text-danger")">@Model.FreeBedsTonight</strong>
+                </li>
                 <li class="mb-2"><i class="bi bi-cash-coin text-success"></i> <strong>@Model.PricePerNight.ToString("0.00") лв.</strong> на нощувка</li>
                 @if (!string.IsNullOrEmpty(Model.PhoneNumber))
                 {
@@ -126,6 +165,7 @@
 </div>
 
 @section Scripts {
+    <partial name="_ValidationScriptsPartial" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="~/js/mini-map.js" asp-append-version="true"></script>
 }
