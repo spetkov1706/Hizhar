@@ -28,6 +28,8 @@ namespace Hizhar.Web.Infrastructure.Extensions
             services.AddScoped<IFavoriteService, FavoriteService>();
             services.AddScoped<IClimbedPeakService, ClimbedPeakService>();
 
+            services.AddScoped<IProfileService, ProfileService>();
+
             return services;
         }
     }

@@ -1,0 +1,104 @@
+﻿@model ProfileViewModel
+@{
+    ViewData["Title"] = "Моят профил";
+}
+
+<div class="hz-page-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+    <div>
+        <h1 class="mb-0">Моят профил</h1>
+        <p class="subtitle mb-0">@Model.Email</p>
+    </div>
+    <div class="d-flex gap-2">
+        <a asp-controller="Reservations" asp-action="Mine" class="btn btn-outline-hz"><i class="bi bi-calendar-check"></i> Резервации (@Model.ReservationsCount)</a>
+        @if (!User.IsHutKeeper())
+        {
+            <a asp-controller="HutKeeper" asp-action="Apply" class="btn btn-outline-secondary"><i class="bi bi-key"></i> Стани хижар</a>
+        }
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="hz-panel">
+            <h4>Прогрес</h4>
+
+            <div class="mb-3">
+                <div class="d-flex justify-content-between">
+                    <span>Национални туристически обекти</span>
+                    <strong>@Model.NationalSitesClimbed от @Model.NationalSitesTotal</strong>
+                </div>
+                <div class="progress mt-1" role="progressbar" aria-valuenow="@Model.NationalProgressPercent" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar" style="width: @Model.NationalProgressPercent%">@Model.NationalProgressPercent%</div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="d-flex justify-content-between">
+                    <span>Всички върхове</span>
+                    <strong>@Model.ClimbedPeaksCount от @Model.TotalPeaks</strong>
+                </div>
+                <div class="progress mt-1" role="progressbar" aria-valuenow="@Model.AllPeaksProgressPercent" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar" style="width: @Model.AllPeaksProgressPercent%">@Model.AllPeaksProgressPercent%</div>
+                </div>
+            </div>
+
+            <div class="row text-center g-2 mt-2">
+                <div class="col-4"><div class="hz-stat p-2"><div class="number fs-3">@Model.PeaksAbove2500Climbed</div><div class="label">над 2500 м</div></div></div>
+                <div class="col-4"><div class="hz-stat p-2"><div class="number fs-3">@Model.ReviewsCount</div><div class="label">ревюта</div></div></div>
+                <div class="col-4"><div class="hz-stat p-2"><div class="number fs-3">@Model.ReportsCount</div><div class="label">доклада</div></div></div>
+            </div>
+        </div>
+
+        <div class="hz-panel">
+            <h4>Изкачени върхове</h4>
+            @if (!Model.ClimbedPeaks.Any())
+            {
+                <p class="text-muted mb-0">Още нямате отбелязани върхове. <a asp-controller="Peaks" asp-action="Index">Разгледайте върховете</a>.</p>
+            }
+            <ul class="list-group list-group-flush">
+                @foreach (ClimbedPeakViewModel peak in Model.ClimbedPeaks)
+                {
+                    <li class="list-group-item d-flex justify-content-between px-0">
+                        <span>
+                            <a asp-controller="Peaks" asp-action="Details" asp-route-id="@peak.PeakId">@peak.Name</a>
+                            <span class="text-muted small">(@peak.Elevation м, @peak.MountainName)</span>
+                        </span>
+                        <span class="text-muted small">@peak.ClimbedOn.ToString("dd.MM.yyyy")</span>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-lg-6">
+        <div class="hz-panel">
+            <h4>Значки</h4>
+            <div class="row g-3">
+                @foreach (BadgeViewModel badge in Model.Badges)
+                {
+                    <div class="col-6 col-md-4">
+                        <div class="hz-badge-tile @(badge.IsEarned ? "" : "locked")" title="@badge.Description">
+                            <i class="bi bi-@badge.Icon"></i>
+                            <div class="fw-semibold small mt-1">@badge.Title</div>
+                            <div class="text-muted" style="font-size: .75rem">@badge.Description</div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 class="hz-section-title"><i class="bi bi-heart-fill"></i> Любими хижи</h2>
+@if (!Model.FavoriteHuts.Any())
+{
+    <p class="text-muted">Нямате любими хижи. Натиснете „Добави в любими“ на страницата на хижа.</p>
+}
+<div class="row g-4">
+    @foreach (HutCardViewModel hut in Model.FavoriteHuts)
+    {
+        <div class="col-md-6 col-lg-4">
+            <partial name="_HutCardPartial" model="hut" />
+        </div>
+    }
+</div>
