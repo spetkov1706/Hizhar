@@ -1,0 +1,21 @@
+﻿@model PhotoUploadFormModel
+
+<form method="post" asp-controller="Photos" asp-action="Upload" enctype="multipart/form-data" class="bg-light rounded-3 p-3 mb-3">
+    <input type="hidden" asp-for="HutId" />
+    <div class="row g-2 align-items-end">
+        <div class="col-md-5">
+            <label asp-for="Photo" class="form-label"></label>
+            <input asp-for="Photo" type="file" class="form-control" accept=".jpg,.jpeg,.png,.webp" />
+            <span asp-validation-for="Photo"></span>
+        </div>
+        <div class="col-md-5">
+            <label asp-for="Caption" class="form-label"></label>
+            <input asp-for="Caption" class="form-control" placeholder="напр. Изгрев над езерото" />
+            <span asp-validation-for="Caption"></span>
+        </div>
+        <div class="col-md-2 d-grid">
+            <button type="submit" class="btn btn-hz"><i class="bi bi-upload"></i> Качи</button>
+        </div>
+    </div>
+    <div class="form-text">JPG, PNG или WEBP, до 5 MB.</div>
+</form>
