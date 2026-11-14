@@ -1,0 +1,26 @@
+﻿@model WeatherForecastViewModel
+
+@if (!Model.IsAvailable)
+{
+    <p class="text-muted mb-0"><i class="bi bi-cloud-slash"></i> Прогнозата в момента не е достъпна.</p>
+}
+else
+{
+    <div class="row g-2">
+        @foreach (WeatherDayViewModel day in Model.Days)
+        {
+            <div class="col-4">
+                <div class="hz-weather-day">
+                    <div class="small fw-semibold">@day.Date.ToString("dd.MM")</div>
+                    <i class="bi bi-@day.Icon"></i>
+                    <div class="small">@day.Description</div>
+                    <div class="fw-semibold">@day.MaxTemperature.ToString("0")° / @day.MinTemperature.ToString("0")°</div>
+                    @if (day.Precipitation > 0)
+                    {
+                        <div class="small text-muted"><i class="bi bi-droplet"></i> @day.Precipitation.ToString("0.#") мм</div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}

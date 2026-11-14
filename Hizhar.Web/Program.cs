@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
+using Hizhar.Services;
+using Hizhar.Services.Contracts;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -48,6 +50,13 @@ builder.Services.AddControllersWithViews(options =>
 builder.Services.AddRazorPages();
 
 builder.Services.AddApplicationServices();
+
+builder.Services.AddMemoryCache();
+builder.Services.AddHttpClient<IWeatherService, WeatherService>(client =>
+{
+    client.BaseAddress = new Uri("https://api.open-meteo.com/");
+    client.Timeout = TimeSpan.FromSeconds(5);
+});
 
 var app = builder.Build();
 

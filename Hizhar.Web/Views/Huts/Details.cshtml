@@ -155,6 +155,13 @@
             </ul>
         </div>
 
+          <div class="hz-panel">
+            <h5><i class="bi bi-cloud-sun"></i> Времето за 3 дни</h5>
+            <div id="weather-box" data-url="@Url.Action("Hut", "Weather", new { id = Model.Id })">
+                <div class="text-muted small"><span class="spinner-border spinner-border-sm"></span> Зареждане...</div>
+            </div>
+        </div>
+
         <div class="hz-panel">
             <h5><i class="bi bi-geo-alt"></i> Местоположение</h5>
             <div class="hz-mini-map"
@@ -168,4 +175,13 @@
     <partial name="_ValidationScriptsPartial" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="~/js/mini-map.js" asp-append-version="true"></script>
+    <script>
+        (function () {
+            var box = document.getElementById('weather-box');
+            fetch(box.dataset.url)
+                .then(function (response) { return response.text(); })
+                .then(function (html) { box.innerHTML = html; })
+                .catch(function () { box.innerHTML = '<p class="text-muted mb-0">Прогнозата не е достъпна.</p>'; });
+        })();
+    </script>
 }
